@@ -1,5 +1,13 @@
 # README
 
+## TODO
+1) Fix up the interface to handle parameters
+1) Add metrics
+1) Add opentelemetry.  
+1) Try out as a lambda service.
+1) APi gateway. 
+1) skaffold with kind for local debugging
+
 ## Prerequisites
 
 Configure the following tools:
