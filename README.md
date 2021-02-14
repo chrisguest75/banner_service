@@ -1,6 +1,31 @@
 # README
 
+## Prerequisites
 
+Configure the following tools:
+
+1. [Pyenv](https://github.com/pyenv/pyenv)
+1. [Intro to Pyenv](https://realpython.com/intro-to-pyenv/)
+1. [Pipenv](https://realpython.com/pipenv-guide/)
+
+## Installation
+
+To install the service locally.
+
+```sh
+git clone <repo>
+cd <repo>
+export PIPENV_VENV_IN_PROJECT=1
+pipenv install --three
+```
+
+## Start
+
+Start the Flask App
+
+```sh
+python ./main.py
+```
 ## Docker image
 ```sh
 # build image
@@ -8,5 +33,11 @@ docker build -t banner_service .
 
 
 docker run -e COLUMNS=${COLUMNS} -e TERM=${TERM} banner_service
+
+
+
+ echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=hello')
+
+ 
 ```
 

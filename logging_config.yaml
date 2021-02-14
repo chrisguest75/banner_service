@@ -1,0 +1,27 @@
+version: 1
+root:
+  level: DEBUG
+  handlers: ["console"]
+formatters:
+  json:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    class: pythonjsonlogger.jsonlogger.JsonFormatter
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    stream: ext://sys.stdout
+    formatter: json
+loggers:
+  werkzeug:
+    level: ERROR
+  app.home:
+    level: DEBUG
+  app.fibonacci:
+    level: DEBUG
+  app.flask.intercepts:
+    level: INFO
+  connexion:
+    level: INFO
+  connexion.apis.abstract:
+    level: INFO
