@@ -7,6 +7,7 @@
 1) Try out as a lambda service.
 1) APi gateway. 
 1) skaffold with kind for local debugging
+1) datadog metrics? 
 
 ## Prerequisites
 
