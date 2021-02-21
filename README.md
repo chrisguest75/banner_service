@@ -41,10 +41,9 @@ python ./main.py
 docker build -t banner_service .
 docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
 
-echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=cuddly')
-echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=knight4')
-echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=tcb')
-echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=carebear')
+echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165"  | sed 's/^\"\(.*\)\"$/\1/' )        
+echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS"  | sed 's/^\"\(.*\)\"$/\1/' ) 
+echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0"  | sed 's/^\"\(.*\)\"$/\1/' ) 
 
 ```
 

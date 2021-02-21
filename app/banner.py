@@ -7,6 +7,8 @@ import os
 from PIL import Image,ImageFilter
 import subprocess
 from dataclasses import dataclass
+import logging
+from connexion.lifecycle import ConnexionResponse
 
 @dataclass
 class Font:
@@ -28,10 +30,13 @@ fonts = {
 @metrics.summary('generate_by_status', 'generate Request latencies by status', labels={
     'code': lambda r: r.status_code
 })
-def generate(message: str, fontname: str) -> str:
+def generate(message: str, fontname: str, width: int) -> str:
     '''
     Given number of terms generate a sequence of fibonacci numbers. 
     '''
+
+    logger = logging.getLogger()
+
     out_folder = "./out"
     banner = str.upper(message)
 
@@ -43,6 +48,7 @@ def generate(message: str, fontname: str) -> str:
     font = Image.open(selected_font.filename)
 
     banner_width = len(banner) * font_width
+
     #font.rotate(45).show()
     out_image = Image.new("RGB", (banner_width, font_height))
 
@@ -51,6 +57,8 @@ def generate(message: str, fontname: str) -> str:
     character=' '
     if selected_font.base_from_a:
         character='A'
+
+    logger.info(f"Cut", extra={"selected_font": selected_font, "banner": message})
 
     for cursor_y in range(0, rows):
         for cursor_x in range(0, characters_per_row):
@@ -76,12 +84,23 @@ def generate(message: str, fontname: str) -> str:
     banner_file = os.path.join(out_folder, 'banner.jpg')
     out_image.save(banner_file) 
 
-    completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors", "--color-depth=24","--fill", banner_file], capture_output=True)
+    if width == 0:
+        width = banner_width
+
+    logger.info(f"Render", extra={"banner_file": banner_file, "banner": message, "width": width})
+    completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
     #completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors","--fill", banner_file], capture_output=True)
     #print(completed.stdout.decode("ascii"))
     #print(completed.stderr.decode("ascii"))
     output = completed.stdout.decode("ascii")
-    return(output)
-
+    #output = "hello"
+    #logger.info(f"Output", extra={"output": output, "length": len(output)})
+    logger.info(f"Output", extra={"length": len(output)})
+    #output = 3
+    #encoded_string = output.encode()
+    #byte_array = bytearray(encoded_string)
+    #return(byte_array)
+    return ConnexionResponse(body=output ,status_code=200, content_type='text/plain')
+    #return(output)
     #completed.check_returncode()
 
