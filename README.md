@@ -39,14 +39,12 @@ python ./main.py
 ```sh
 # build image
 docker build -t banner_service .
+docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
 
+echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=cuddly')
+echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=knight4')
+echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=tcb')
+echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=whatever&fontname=carebear')
 
-docker run -e COLUMNS=${COLUMNS} -e TERM=${TERM} banner_service
-
-
-
- echo $(curl -s -X GET --header 'Accept: application/json' 'http://localhost:5000/api/banner?message=hello')
-
- 
 ```
 

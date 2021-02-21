@@ -19,16 +19,16 @@ RUN adduser --system --uid $USERID --gid $GROUPID appuser
 RUN mkdir -p /workbench/app
 
 WORKDIR /workbench
+RUN mkdir -p /workbench/out
 COPY ./Pipfile /workbench/Pipfile
 COPY ./Pipfile.lock /workbench/Pipfile.lock 
-
 RUN pipenv install --deploy --system --dev
+COPY ./logging_config.yaml /workbench/logging_config.yaml
+COPY ./fonts /workbench/fonts
 
 COPY ./main.py /workbench/main.py
-COPY ./fonts /workbench/fonts
-COPY ./out /workbench//out
-#COPY ./app /workbench/app
-#COPY ./logging_config.yaml /workbench/logging_config.yaml
+COPY ./app /workbench/app
+
 
 # set to no debugger.
 ENV DEBUGGER=False

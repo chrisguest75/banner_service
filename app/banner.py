@@ -6,28 +6,52 @@ from app import metrics
 import os
 from PIL import Image,ImageFilter
 import subprocess
+from dataclasses import dataclass
+
+@dataclass
+class Font:
+    base_from_a: bool
+    font_width: int
+    font_height: int
+    rows: int
+    characters_per_row: int
+    filename: str  
+
+
+fonts = { 
+    "carebear": Font(filename='fonts/carebear.jpg', base_from_a=False, font_width=26, font_height=26, characters_per_row=12, rows=5),
+    "cuddly": Font(filename='fonts/cuddly.jpg', base_from_a=True, font_width=32, font_height=32, characters_per_row=10, rows=5),
+    "knight4": Font(filename='fonts/knight4.jpg', base_from_a=False, font_width=32, font_height=25, characters_per_row=10, rows=7),
+    "tcb": Font(filename='fonts/tcb.jpg', base_from_a=False, font_width=32, font_height=32, characters_per_row=10, rows=6)
+}
 
 @metrics.summary('generate_by_status', 'generate Request latencies by status', labels={
     'code': lambda r: r.status_code
 })
-def generate(message: str) -> str:
+def generate(message: str, fontname: str) -> str:
     '''
     Given number of terms generate a sequence of fibonacci numbers. 
     '''
     out_folder = "./out"
-    banner = "CAREBEARS"
-    font_width = 26
-    font_height = 26
-    rows = 5
-    characters_per_row = 12
+    banner = str.upper(message)
 
-    font = Image.open('fonts/carebear.jpg')
+    selected_font = fonts[fontname]
+    font_width = selected_font.font_width
+    font_height = selected_font.font_height
+    rows = selected_font.rows
+    characters_per_row = selected_font.characters_per_row
+    font = Image.open(selected_font.filename)
+
     banner_width = len(banner) * font_width
     #font.rotate(45).show()
     out_image = Image.new("RGB", (banner_width, font_height))
 
     letters={}
+
     character=' '
+    if selected_font.base_from_a:
+        character='A'
+
     for cursor_y in range(0, rows):
         for cursor_x in range(0, characters_per_row):
             coords = (cursor_x * font_width, cursor_y * font_height, (cursor_x * font_width) + font_width, (cursor_y * font_height) + font_height)
@@ -52,11 +76,12 @@ def generate(message: str) -> str:
     banner_file = os.path.join(out_folder, 'banner.jpg')
     out_image.save(banner_file) 
 
-    #completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors", "--color-depth=24","--fill", banner_file], capture_output=True)
-    completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors","--fill", banner_file], capture_output=True)
+    completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors", "--color-depth=24","--fill", banner_file], capture_output=True)
+    #completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors","--fill", banner_file], capture_output=True)
     #print(completed.stdout.decode("ascii"))
     #print(completed.stderr.decode("ascii"))
-    return(completed.stdout.decode("ascii"))
+    output = completed.stdout.decode("ascii")
+    return(output)
 
     #completed.check_returncode()
 

@@ -22,6 +22,11 @@ paths:
           in: query
           type: "string"
           required: true
+        - name: fontname
+          description: Font to use.
+          in: query
+          type: "string"
+          required: true
       tags:
         - "numbers"
       summary: ""
