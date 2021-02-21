@@ -90,17 +90,8 @@ def generate(message: str, fontname: str, width: int) -> str:
     logger.info(f"Render", extra={"banner_file": banner_file, "banner": message, "width": width})
     completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
     #completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors","--fill", banner_file], capture_output=True)
-    #print(completed.stdout.decode("ascii"))
-    #print(completed.stderr.decode("ascii"))
     output = completed.stdout.decode("ascii")
-    #output = "hello"
-    #logger.info(f"Output", extra={"output": output, "length": len(output)})
     logger.info(f"Output", extra={"length": len(output)})
-    #output = 3
-    #encoded_string = output.encode()
-    #byte_array = bytearray(encoded_string)
-    #return(byte_array)
-    return ConnexionResponse(body=output ,status_code=200, content_type='text/plain')
-    #return(output)
+    return(output)
     #completed.check_returncode()
 
