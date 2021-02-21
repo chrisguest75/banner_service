@@ -7,6 +7,11 @@ name = "pypi"
 flask = "*"
 python-dotenv = "*"
 pillow = "*"
+connexion = {extras = ["swagger-ui"], version = "*"}
+ptvsd = "*"
+python-json-logger = "*"
+prometheus-flask-exporter = "*"
+flask-injector = "*"
 
 [dev-packages]
 pytest = "*"

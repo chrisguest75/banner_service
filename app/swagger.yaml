@@ -1,0 +1,56 @@
+swagger: "2.0"
+info:
+  title: "Banner swagger service"
+  description: "Offers functionality to return ascii rendered banners"
+  version: "1.0.0"
+
+consumes:
+  - "application/json"
+produces:
+  - "text/plain"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /banner:
+    get:
+      consumes:
+        - text/plain       
+      produces:
+        - text/plain
+      operationId: "app.banner.generate"
+      parameters:
+        - name: message
+          description: Message to render.
+          in: query
+          type: "string"
+          required: true
+        - name: fontname
+          description: Font to use.
+          in: query
+          type: "string"
+          required: true
+        - name: width
+          description: Width of terminal
+          in: query
+          type: "integer"
+          default: 0
+          required: false          
+      tags:
+        - "banner"
+      summary: "Will return the banner as a plain text ansi string"
+      description: "Generate the banner"
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: string
+
+      # responses:
+      #   200:
+      #     description: "ascii banner" 
+      #     content:
+      #       text/plain:
+      #         schema:
+      #           type: string

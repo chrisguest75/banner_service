@@ -1,12 +1,53 @@
 # README
 
+## TODO
+
+1) Add metrics
+1) Add opentelemetry.  
+1) Try out as a lambda service.
+1) APi gateway. 
+1) skaffold with kind for local debugging
+1) datadog metrics? 
+1) Add a list fonts call
+
+## Prerequisites
+
+Configure the following tools:
+
+1. [Pyenv](https://github.com/pyenv/pyenv)
+1. [Intro to Pyenv](https://realpython.com/intro-to-pyenv/)
+1. [Pipenv](https://realpython.com/pipenv-guide/)
+
+## Installation
+
+To install the service locally.
+
+```sh
+git clone <repo>
+cd <repo>
+export PIPENV_VENV_IN_PROJECT=1
+pipenv install --three
+```
+
+## Start
+Start the Flask App
+
+```sh
+python ./main.py
+```
 
 ## Docker image
+Build, run and test
 ```sh
 # build image
 docker build -t banner_service .
+# run
+docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
 
-
-docker run -e COLUMNS=${COLUMNS} -e TERM=${TERM} banner_service
+# test
+echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165" | sed 's/^\"\(.*\)\"$/\1/' )        
+echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' ) 
+echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
+echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
 ```
 
