@@ -7,12 +7,30 @@ info:
 consumes:
   - "application/json"
 produces:
-  - "text/plain"
+  - "application/json"
 
 basePath: "/api"
 
 # Paths supported by the server application
 paths:
+  /health:
+    get:
+      tags: [health]
+      operationId: app.health.health
+      summary: Health Check
+      responses:
+        '200':
+          description: Status message for current health
+
+  /ready:
+    get:
+      tags: [ready]
+      operationId: app.ready.ready
+      summary: Readiness Check
+      responses:
+        '200':
+          description: Status message for current readiness
+
   /banner:
     get:
       consumes:
@@ -46,11 +64,26 @@ paths:
           description: 'OK'
           schema:
             type: string
+        400:
+          description: 'Font not found'
+          schema:
+            type: string
 
-      # responses:
-      #   200:
-      #     description: "ascii banner" 
-      #     content:
-      #       text/plain:
-      #         schema:
-      #           type: string
+  /fonts:
+    get:
+      consumes:
+        - application/json       
+      produces:
+        - application/json
+      operationId: "app.banner.supported_fonts"
+      summary: "Will return the supported fonts"
+      description: "Supported fonts"
+      responses:
+        '200':
+          description: 'Array of font names.'
+          schema:
+            type: "array"
+            items:
+              properties:
+                name:
+                  type: "string"

@@ -1,0 +1,46 @@
+config:
+  target: "http://0.0.0.0:5000"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      name: Warm up
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 50
+      name: Ramp up load
+    - duration: 300
+      arrivalRate: 50
+      name: Sustained load
+  variables:
+    messages:
+      - "hello"
+      - "hello world"
+      - "carebear"
+      - "zoo"
+      - "banner"
+    fonts:
+      - "cuddly"
+      - "carebear"
+      - "tcb"
+      - "knight4"
+    widths:
+      - 100
+      - 160
+      - 50
+      - 90
+
+scenarios:
+  - name: "Generate banners"
+    flow:
+      - get:
+          url: "/api/banner?message={{ messages }}&fontname={{ fonts }}&width={{ widths }}"
+
+  - name: "Supported fonts"
+    flow:
+      - get:
+          url: "/api/fonts"
+
+  - name: "Metrics"
+    flow:
+      - get:
+          url: "/metrics"
