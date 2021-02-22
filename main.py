@@ -75,7 +75,7 @@ if __name__ == "__main__":
         logger.error(f"PORT environment variable not set")
         exit(1)
 
-    from app import app
+    from app import app, home
     app.run(port=server_port, host='0.0.0.0', use_reloader=False)
 
     exit(0)

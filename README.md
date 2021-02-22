@@ -2,7 +2,6 @@
 
 ## TODO
 1) Landing page
-1) Load tests
 1) Add custom metrics
 1) Add opentelemetry.  
 1) datadog metrics? 
@@ -45,6 +44,9 @@ Build, run and test
 docker build -t banner_service .
 # run
 docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
+
+open http://localhost:5000/
+curl http://localhost:5000/favicon.ico
 
 # test api ui
 open http://localhost:5000/api/ui
