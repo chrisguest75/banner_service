@@ -1,6 +1,7 @@
 # README
 
 ## TODO
+1) How do I get connexion to return unquoted string
 1) Landing page
 1) Add custom metrics
 1) Add opentelemetry.  
