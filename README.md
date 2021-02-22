@@ -1,14 +1,16 @@
 # README
 
 ## TODO
-
-1) Add metrics
+1) Landing page
+1) Load tests
+1) Add custom metrics
 1) Add opentelemetry.  
+1) datadog metrics? 
 1) Try out as a lambda service.
 1) APi gateway. 
+1) Add kind deployment 
 1) skaffold with kind for local debugging
-1) datadog metrics? 
-1) Add a list fonts call
+1) prometheus and grafana.
 
 ## Prerequisites
 
@@ -44,10 +46,29 @@ docker build -t banner_service .
 # run
 docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
 
-# test
+# test api ui
+open http://localhost:5000/api/ui
+
+# test metrics
+curl http://localhost:5000/metrics
+
+# test endpoints
+curl http://localhost:5000/api/fonts
+curl http://localhost:5000/api/health
+curl http://localhost:5000/api/ready
+
+# get banners
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165" | sed 's/^\"\(.*\)\"$/\1/' )        
 echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' ) 
 echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
 echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
 ```
 
+## Load Test
+```sh
+# install artillery
+npm install -g artillery
+
+# run artillery trests
+artillery run ./tests/artillery/generate.yml
+```
