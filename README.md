@@ -41,9 +41,8 @@ python ./main.py
 ## Docker image
 Build, run and test
 ```sh
-# build image
+# build image and run 
 docker build -t banner_service .
-# run
 docker run --rm -e COLUMNS=${COLUMNS} -e TERM=${TERM} -e PORT=5000 -p 5000:5000 banner_service
 
 open http://localhost:5000/
@@ -62,9 +61,9 @@ curl http://localhost:5000/api/ready
 
 # get banners
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165" | sed 's/^\"\(.*\)\"$/\1/' )        
-echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' ) 
-echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
-echo $(curl -s -X GET --header 'Accept: text/html' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
+echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' ) 
+echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
+echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
 ```
 
 ## Load Test

@@ -20,7 +20,6 @@ RUN mkdir -p /workbench/app
 
 WORKDIR /workbench
 RUN mkdir -p /workbench/out
-COPY ./static /workbench/static
 COPY ./Pipfile /workbench/Pipfile
 COPY ./Pipfile.lock /workbench/Pipfile.lock 
 RUN pipenv install --deploy --system --dev
