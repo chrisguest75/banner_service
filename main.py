@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     sys.excepthook = log_uncaught_exceptions
 
-    parser = argparse.ArgumentParser(description='Wordament Solver Service')
+    parser = argparse.ArgumentParser(description='Banner Service')
     parser.add_argument('--debugger', dest='debugger', action='store_true')
     parser.add_argument('--wait', dest='wait', action='store_true')
     args = parser.parse_args()
@@ -76,6 +76,6 @@ if __name__ == "__main__":
         exit(1)
 
     from app import app, home
-    app.run(port=server_port, host='0.0.0.0', use_reloader=False)
+    app.run(port=server_port, host='0.0.0.0', use_reloader=True)
 
     exit(0)

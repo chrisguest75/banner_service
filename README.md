@@ -1,7 +1,9 @@
 # README
 
 ## TODO
-1) How do I get connexion to return unquoted string
+1) non-docker build is not working
+1) swagger interface not working
+1) add tests
 1) Landing page
 1) Add custom metrics
 1) Add opentelemetry.  
@@ -35,6 +37,7 @@ pipenv install --three
 Start the Flask App
 
 ```sh
+pipenv shell
 python ./main.py
 ```
 
@@ -60,6 +63,12 @@ curl http://localhost:5000/api/health
 curl http://localhost:5000/api/ready
 
 # get banners
+curl -s -X GET "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165"
+curl -s -X GET "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS"
+curl -s -X GET "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0"
+curl -s -X GET "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS"
+
+# get banners 
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=165" | sed 's/^\"\(.*\)\"$/\1/' )        
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' ) 
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
