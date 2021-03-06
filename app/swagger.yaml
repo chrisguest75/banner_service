@@ -65,10 +65,13 @@ paths:
           schema:
             type: string
         400:
-          description: 'Font not found'
+          description: 'Unsupported font'
           schema:
             type: string
-
+        503:
+          description: 'Failed to process'
+          schema:
+            type: string
   /fonts:
     get:
       consumes:

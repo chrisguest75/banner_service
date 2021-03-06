@@ -7,5 +7,5 @@ app = connexion.FlaskApp(__name__, specification_dir='./')
 metrics = ConnexionPrometheusMetrics(app)
 
 # Read the swagger.yml file to configure the endpoints
-app.add_api('swagger.yaml', validate_responses=False)
+app.add_api('./swagger.yaml', validate_responses=False)
 handlers = flask_intercepts(app)

@@ -33,6 +33,7 @@ COPY ./app /workbench/app
 # set to no debugger.
 ENV DEBUGGER=False
 ENV WAIT=False
+ENV DOCKER=True
 
 #USER appuser
 EXPOSE 8080

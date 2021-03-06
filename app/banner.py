@@ -11,6 +11,10 @@ import logging
 from connexion.lifecycle import ConnexionResponse
 from connexion import NoContent
 from prometheus_client import Counter
+from flask import make_response
+
+def str2bool(v):
+    return v.lower() in ("yes", "true", "t", "1")
 
 @dataclass
 class Font:
@@ -35,7 +39,7 @@ SELECTED_FONTS = Counter('font', 'font', ['name'])
 })
 def generate(message: str, fontname: str, width: int) -> str:
     '''
-    Given number of terms generate a sequence of fibonacci numbers. 
+    Render the banner message in a fontname with the given terminal width     
     '''
 
     logger = logging.getLogger()
@@ -45,7 +49,7 @@ def generate(message: str, fontname: str, width: int) -> str:
 
     if fontname not in fonts:
         SELECTED_FONTS.labels("error").inc()
-        return NoContent, 400
+        return "Unsupported font", 400
 
     selected_font = fonts[fontname]
     # increment font selection counter
@@ -94,15 +98,31 @@ def generate(message: str, fontname: str, width: int) -> str:
     banner_file = os.path.join(out_folder, 'banner.jpg')
     out_image.save(banner_file) 
 
+    docker = False
+    if 'DOCKER' in os.environ:
+        docker = str2bool(os.environ['DOCKER'])
+        logger.info(f"DOCKER found in environment {docker}", extra={"docker": docker})
+
     if width == 0:
         width = banner_width
 
     logger.info(f"Render", extra={"banner_file": banner_file, "banner": message, "width": width})
-    completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
-    #completed = subprocess.run(["jp2a", "--width=" + str(banner_width), "--colors","--fill", banner_file], capture_output=True)
+    if docker:
+        completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
+    else:
+        completed = subprocess.run(["jp2a", "--width=" + str(width), "--invert", banner_file], capture_output=True)
+
+    if completed.returncode != 0:
+        logger.error(f"Error running jp2a", extra={"stderr": completed.stderr})
+        return "Failed to process", 503
+
     output = completed.stdout.decode("ascii")
     logger.info(f"Output", extra={"length": len(output)})
-    return(output)
+
+    # ensure that the response is not quoted
+    response = make_response(output, 200)
+    response.mimetype = "text/plain"
+    return response    
 
 @metrics.summary('supported_fonts_by_status', 'supported fonts Request latencies by status', labels={
     'code': lambda r: r.status_code
