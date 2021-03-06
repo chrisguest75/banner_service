@@ -9,27 +9,27 @@ consumes:
 produces:
   - "application/json"
 
-basePath: "/"
+basePath: "/api"
 
 # Paths supported by the server application
 paths:
-  /:
-    get:
-      tags: [home]
-      operationId: app.home.home
-      summary: Home page
-      responses:
-        '200':
-          description: Home page
+  # /:
+  #   get:
+  #     tags: [home]
+  #     operationId: app.home.home
+  #     summary: Home page
+  #     responses:
+  #       '200':
+  #         description: Home page
 
-  /favicon.ico:
-    get:
-      tags: [favicon]
-      operationId: app.home.favicon
-      summary: favicon
-      responses:
-        '200':
-          description: Favicon.ico
+  # /favicon.ico:
+  #   get:
+  #     tags: [favicon]
+  #     operationId: app.home.favicon
+  #     summary: favicon
+  #     responses:
+  #       '200':
+  #         description: Favicon.ico
 
   # /metrics:
   #   get:
@@ -39,7 +39,7 @@ paths:
   #       '200':
   #         description: Metrics
 
-  /api/health:
+  /health:
     get:
       tags: [health]
       operationId: app.health.health
@@ -48,7 +48,7 @@ paths:
         '200':
           description: Status message for current health
 
-  /api/ready:
+  /ready:
     get:
       tags: [ready]
       operationId: app.ready.ready
@@ -57,7 +57,7 @@ paths:
         '200':
           description: Status message for current readiness
 
-  /api/banner:
+  /banner:
     get:
       consumes:
         - text/plain       
@@ -98,7 +98,8 @@ paths:
           description: 'Failed to process'
           schema:
             type: string
-  /api/fonts:
+  
+  /fonts:
     get:
       consumes:
         - application/json       

@@ -1,8 +1,10 @@
 import pytest
 import connexion
+from app import home
+#from app import app
 
 flask_app = connexion.FlaskApp(__name__)
-flask_app.add_api('./swagger.yaml')
+#flask_app.add_api('./openapi/swagger.yaml')
 flask_app.testing = True
 
 @pytest.fixture(scope='module')
@@ -14,7 +16,7 @@ def client():
 def test_home(client):
     """ Test home endpoint returns 200    
     """
-    response = client.get()
+    response = client.get('')
     assert response.status_code == 200
 
 def test_favicon(client):

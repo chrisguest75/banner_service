@@ -13,7 +13,7 @@ def dependency_check():
         else:    
             logger.debug(f"jp2a found in environment", extra={"version": completed.stdout})
             return True
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         logger.debug(f"jp2a not found in environment", extra={})
         return False
 
