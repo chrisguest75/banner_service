@@ -74,7 +74,11 @@ echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/b
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
 ```
+# Testing
+```sh
+pipenv install --dev
 
+```
 ## Load Test
 ```sh
 # install artillery
