@@ -44,79 +44,83 @@ def generate(message: str, fontname: str, width: int) -> str:
 
     logger = logging.getLogger()
 
-    out_folder = "./out"
-    banner = str.upper(message)
+    output = ""
 
-    if fontname not in fonts:
-        SELECTED_FONTS.labels("error").inc()
-        return "Unsupported font", 400
+    if len(message) > 0:    
+        out_folder = "./out"
+        banner = str.upper(message)
 
-    selected_font = fonts[fontname]
-    # increment font selection counter
-    SELECTED_FONTS.labels(fontname).inc()
+        if fontname not in fonts:
+            SELECTED_FONTS.labels("error").inc()
+            return "Unsupported font", 400
 
-    font_width = selected_font.font_width
-    font_height = selected_font.font_height
-    rows = selected_font.rows
-    characters_per_row = selected_font.characters_per_row
-    font = Image.open(selected_font.filename)
+        selected_font = fonts[fontname]
+        # increment font selection counter
+        SELECTED_FONTS.labels(fontname).inc()
 
-    banner_width = len(banner) * font_width
+        font_width = selected_font.font_width
+        font_height = selected_font.font_height
+        rows = selected_font.rows
+        characters_per_row = selected_font.characters_per_row
+        font = Image.open(selected_font.filename)
 
-    #font.rotate(45).show()
-    out_image = Image.new("RGB", (banner_width, font_height))
+        banner_width = len(banner) * font_width
 
-    letters={}
+        #font.rotate(45).show()
+        out_image = Image.new("RGB", (banner_width, font_height))
 
-    character=' '
-    if selected_font.base_from_a:
-        character='A'
+        letters={}
 
-    logger.info(f"Cut", extra={"selected_font": selected_font, "banner": message})
+        character=' '
+        if selected_font.base_from_a:
+            character='A'
 
-    for cursor_y in range(0, rows):
-        for cursor_x in range(0, characters_per_row):
-            coords = (cursor_x * font_width, cursor_y * font_height, (cursor_x * font_width) + font_width, (cursor_y * font_height) + font_height)
-            #print(character + " " + str(coords))
-            #letter = font.crop(corrds)
-            #letters[character] = letter
-            letters[character] = coords
-            character = chr(ord(character) + 1) 
+        logger.info(f"Cut", extra={"selected_font": selected_font, "banner": message})
 
-    cursor_x = 0
-    for letter in banner:
-        coords = letters[letter]
-        letter_image = font.crop(coords)
-        #print(letter + " " + str(coords))
-        out_image.paste(letter_image, (cursor_x * font_width, 0)) 
-        cursor_x += 1
-    #out_image.show()
+        for cursor_y in range(0, rows):
+            for cursor_x in range(0, characters_per_row):
+                coords = (cursor_x * font_width, cursor_y * font_height, (cursor_x * font_width) + font_width, (cursor_y * font_height) + font_height)
+                #print(character + " " + str(coords))
+                #letter = font.crop(corrds)
+                #letters[character] = letter
+                letters[character] = coords
+                character = chr(ord(character) + 1) 
 
-    if not os.path.exists(out_folder):
-        os.makedirs(out_folder)
+        cursor_x = 0
+        for letter in banner:
+            coords = letters[letter]
+            letter_image = font.crop(coords)
+            #print(letter + " " + str(coords))
+            out_image.paste(letter_image, (cursor_x * font_width, 0)) 
+            cursor_x += 1
+        #out_image.show()
 
-    banner_file = os.path.join(out_folder, 'banner.jpg')
-    out_image.save(banner_file) 
+        if not os.path.exists(out_folder):
+            os.makedirs(out_folder)
 
-    docker = False
-    if 'DOCKER' in os.environ:
-        docker = str2bool(os.environ['DOCKER'])
-        logger.info(f"DOCKER found in environment {docker}", extra={"docker": docker})
+        banner_file = os.path.join(out_folder, 'banner.jpg')
+        out_image.save(banner_file) 
 
-    if width == 0:
-        width = banner_width
+        docker = False
+        if 'DOCKER' in os.environ:
+            docker = str2bool(os.environ['DOCKER'])
+            logger.info(f"DOCKER found in environment {docker}", extra={"docker": docker})
 
-    logger.info(f"Render", extra={"banner_file": banner_file, "banner": message, "width": width})
-    if docker:
-        completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
-    else:
-        completed = subprocess.run(["jp2a", "--width=" + str(width), "--invert", banner_file], capture_output=True)
+        if width == 0:
+            width = banner_width
 
-    if completed.returncode != 0:
-        logger.error(f"Error running jp2a", extra={"stderr": completed.stderr})
-        return "Failed to process", 503
+        logger.info(f"Render", extra={"banner_file": banner_file, "banner": message, "width": width})
+        if docker:
+            completed = subprocess.run(["jp2a", "--width=" + str(width), "--colors", "--color-depth=24", "--fill", banner_file], capture_output=True)
+        else:
+            completed = subprocess.run(["jp2a", "--width=" + str(width), "--invert", banner_file], capture_output=True)
 
-    output = completed.stdout.decode("ascii")
+        if completed.returncode != 0:
+            logger.error(f"Error running jp2a", extra={"stderr": completed.stderr})
+            return "Failed to process", 503
+
+        output = completed.stdout.decode("ascii")
+        
     logger.info(f"Output", extra={"length": len(output)})
 
     # ensure that the response is not quoted
