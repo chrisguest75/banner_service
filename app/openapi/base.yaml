@@ -1,0 +1,31 @@
+swagger: "2.0"
+info:
+  title: "Banner swagger service"
+  description: "Offers functionality to return ascii rendered banners"
+  version: "1.0.0"
+
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/"
+
+# Paths supported by the server application
+paths:
+  /index.html:
+    get:
+      operationId: app.home.home
+      summary: Home page
+      responses:
+        '200':
+          description: Home page
+
+  /favicon.ico:
+    get:
+      operationId: app.home.favicon
+      summary: favicon
+      responses:
+        '200':
+          description: Favicon.ico
+

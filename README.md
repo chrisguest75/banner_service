@@ -1,11 +1,11 @@
 # README
 
+[fixed] Landing page - tests do not work, but endpoint does
+[fixed] api UI working now
+ Add custom metrics - endpoint does not work but tests do
+
 ## TODO
 1) non-docker build is not working
-1) swagger interface not working
-1) add tests
-1) Landing page
-1) Add custom metrics
 1) Add opentelemetry.  
 1) datadog metrics? 
 1) Try out as a lambda service.

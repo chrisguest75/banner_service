@@ -3,9 +3,9 @@ import connexion
 from prometheus_flask_exporter import ConnexionPrometheusMetrics
 
 # Create the application instance
-flask_app = connexion.FlaskApp(__name__)
+flask_app = connexion.FlaskApp(__name__, specification_dir='./openapi')
 metrics = ConnexionPrometheusMetrics(flask_app)
-flask_app.add_api('./openapi/swagger.yaml')
+flask_app.add_api('./swagger.yaml')
 flask_app.testing = True
 
 @pytest.fixture(scope='module')

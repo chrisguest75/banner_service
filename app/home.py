@@ -4,6 +4,10 @@ from flask import render_template, send_from_directory
 import logging
 
 @app.route('/')
+def root():
+    return render_template("banner.html")
+
+@app.route('/index.html')
 def home():
     return render_template("banner.html")
 
