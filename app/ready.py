@@ -1,7 +1,7 @@
 from connexion import NoContent
 from app import metrics
 
-@metrics.summary('reasy_by_status', 'ready Request latencies by status', labels={
+@metrics.summary('ready_by_status', 'ready Request latencies by status', labels={
     'code': lambda r: r.status_code
 })
 def ready():

@@ -41,7 +41,6 @@ paths:
 
   /health:
     get:
-      tags: [health]
       operationId: app.health.health
       summary: Health Check
       responses:
@@ -50,7 +49,6 @@ paths:
 
   /ready:
     get:
-      tags: [ready]
       operationId: app.ready.ready
       summary: Readiness Check
       responses:
