@@ -1,11 +1,12 @@
 # README
 
+[fixed] Landing page - tests do not work, but endpoint does
+[fixed] api UI working now
+ Add custom metrics - endpoint does not work but tests do
+ https://github.com/Sciebo-RDS/connexion-plus
+
 ## TODO
 1) non-docker build is not working
-1) swagger interface not working
-1) add tests
-1) Landing page
-1) Add custom metrics
 1) Add opentelemetry.  
 1) datadog metrics? 
 1) Try out as a lambda service.
@@ -74,7 +75,11 @@ echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/b
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=whatever&fontname=cuddly&width=0" | sed 's/^\"\(.*\)\"$/\1/' ) 
 echo $(curl -s -X GET --header 'Accept: text/plain' "http://localhost:5000/api/banner?message=CIRCLE%20CI&fontname=knight4&width=$COLUMNS" | sed 's/^\"\(.*\)\"$/\1/' )
 ```
+# Testing
+```sh
+pipenv install --dev
 
+```
 ## Load Test
 ```sh
 # install artillery
